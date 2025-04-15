@@ -1,0 +1,147 @@
+{% schema %}
+{
+  "name": "Trade Info Section",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Background Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "overlay_image",
+      "label": "Overlay Image (Optional)"
+    },
+    {
+      "type": "text",
+      "id": "highlighted_text",
+      "label": "Highlighted Text",
+      "default": "LOOKING FOR TRADE INFO?"
+    },
+    {
+      "type": "text",
+      "id": "main_text",
+      "label": "Main Text",
+      "default": "LOOK NO FURTHER ..."
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button Text",
+      "default": "MORE INFORMATION"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button Link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Trade Info Section",
+      "category": "Custom Content"
+    }
+  ]
+}
+{% endschema %}
+
+<div class="brewery-trade-section">
+  <div
+    class="brewery-trade-image-container"
+    style="
+      {% if section.settings.overlay_image %}
+        background-image: url('{{ section.settings.overlay_image | img_url: 'master' }}'), url('{{ section.settings.background_image | img_url: 'master' }}');
+      {% else %}
+        background-image: url('{{ section.settings.background_image | img_url: 'master' }}');
+      {% endif %}
+    "
+  ></div>
+
+  <div class="brewery-trade-content-box">
+    <h2>
+      <span>{{ section.settings.highlighted_text }}</span>
+      <br>
+      {{ section.settings.main_text }}
+    </h2>
+    <a href="{{ section.settings.button_link }}" class="brewery-trade-btn">{{ section.settings.button_text }}</a>
+  </div>
+</div>
+
+<style>
+  .brewery-trade-section {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      background: #fff;
+      padding: 40px;
+      box-sizing: border-box;
+    margin: 0 auto;
+    max-width: 1200px;
+  }
+
+  .brewery-trade-image-container {
+      flex: 1 1 50%;
+      background-size: cover, cover;
+      background-position: center, center;
+      background-repeat: no-repeat, no-repeat;
+      height: 400px;
+      border-radius: 4px;
+      box-sizing: border-box;
+  }
+
+  .brewery-trade-content-box {
+      flex: 1 1 40%;
+      background-color: #002855;
+      color: white;
+      padding: 40px;
+      margin-left: -40px;
+      box-shadow: 10px 0 0 #f9b000;
+      position: relative;
+      z-index: 1;
+      box-sizing: border-box;
+  }
+
+  .brewery-trade-content-box h2 {
+      font-size: 51px;
+      max-width: 300px;
+    line-height: .755;
+    margin-bottom: 10px;
+    color: white;
+  }
+
+  .brewery-trade-content-box h2 span {
+      color: #f9b000;
+    font-family: 'ChaletComprime-CologneEighty';
+    font-size: 51px;
+    font-weight: 400;
+  }
+
+  .brewery-trade-btn {
+      display: inline-block;
+      background-color: #f9b000;
+      color: #002855;
+      padding: 12px 24px;
+      text-decoration: none;
+      font-weight: bold;
+      border-radius: 2px;
+      margin-top: 20px;
+  }
+
+  @media (max-width: 768px) {
+      .brewery-trade-section {
+          flex-direction: column;
+      }
+
+      .brewery-trade-image-container,
+      .brewery-trade-content-box {
+          margin: 0;
+          width: 100%;
+      }
+
+      .brewery-trade-content-box {
+          margin-top: 20px;
+          box-shadow: none;
+      }
+  }
+</style>

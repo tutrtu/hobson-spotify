@@ -1,0 +1,244 @@
+<div class="custom-product-showcase" style="background-color: {{ section.settings.background_color }};">
+  <div class="custom-product-showcase__content">
+    <div class="custom-product-showcase__product-image">
+      {% if section.settings.product_image != blank %}
+        <img
+          src="{{ section.settings.product_image | img_url: 'master' }}"
+          alt="{{ section.settings.product_image.alt | escape }}"
+          class="custom-product-showcase__product-img"
+        >
+      {% endif %}
+    </div>
+
+    <div class="custom-product-showcase__text">
+      {% if section.settings.heading != blank %}
+        <h2 class="custom-product-showcase__heading">{{ section.settings.heading }}</h2>
+      {% endif %}
+
+      {% if section.settings.subheading != blank %}
+        <h3 class="custom-product-showcase__subheading">{{ section.settings.subheading }}</h3>
+      {% endif %}
+
+      {% comment %} Render blocks here {% endcomment %}
+      {% for block in section.blocks %}
+        {% case block.type %}
+          {% when 'button' %}
+            <a
+              href="{{ block.settings.button_link }}"
+              class="custom-product-showcase__button"
+              {{ block.shopify_attributes }}
+            >
+              {{ block.settings.button_label | escape }}
+            </a>
+          {% when 'text' %}
+            <div class="custom-product-showcase__block-text" {{ block.shopify_attributes }}>
+              {{ block.settings.text }}
+            </div>
+        {% endcase %}
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+<style>
+  .custom-product-showcase {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    padding: 60px 0;
+  }
+
+  .custom-product-showcase__content {
+    display: flex;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  .custom-product-showcase__product-image {
+    flex: 0 0 auto;
+    width: 65%;
+  }
+
+  .custom-product-showcase__product-img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .custom-product-showcase__text {
+    flex: 1;
+    padding-left: 5%;
+    text-align: center;
+  }
+
+  .custom-product-showcase__heading {
+    font-size: 36px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: {{ section.settings.heading_color }};
+    text-transform: uppercase;
+  }
+
+  .custom-product-showcase__subheading {
+    font-size: 28px;
+    font-weight: 400;
+    margin-bottom: 25px;
+    color: {{ section.settings.subheading_color }};
+    text-transform: uppercase;
+  }
+
+  .custom-product-showcase__button {
+    display: inline-block;
+    padding: 12px 30px;
+    background-color: {{ section.settings.button_background }};
+    color: {{ section.settings.button_text_color }};
+    text-decoration: none;
+    font-weight: 600;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+    margin-bottom: 10px;
+  }
+
+  .custom-product-showcase__button:hover {
+    background-color: {{ section.settings.button_background | color_darken: 10 }};
+  }
+
+  .custom-product-showcase__block-text {
+    margin-bottom: 15px;
+    color: {{ section.settings.text_color }};
+  }
+
+  @media screen and (max-width: 989px) {
+    .custom-product-showcase {
+      padding: 40px 0;
+    }
+
+    .custom-product-showcase__content {
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .custom-product-showcase__product-image {
+      width: 85%;
+      margin-bottom: 30px;
+    }
+
+    .custom-product-showcase__text {
+      padding-left: 0;
+    }
+
+    .custom-product-showcase__heading {
+      font-size: 28px;
+    }
+
+    .custom-product-showcase__subheading {
+      font-size: 22px;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Product Showcase",
+  "settings": [
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background Color",
+      "default": "#00235a"
+    },
+    {
+      "type": "image_picker",
+      "id": "product_image",
+      "label": "Product Image"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "VISIT OUR CASE BUILDER"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "CREATE YOUR OWN SELECTION"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "default": "#FFD700"
+    },
+    {
+      "type": "color",
+      "id": "subheading_color",
+      "label": "Subheading color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "button_background",
+      "label": "Button background",
+      "default": "#FFD700"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Button text color",
+      "default": "#000000"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "button",
+      "name": "Button",
+      "limit": 2,
+      "settings": [
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Button Label",
+          "default": "MORE INFORMATION"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Button Link"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "name": "Text",
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>Add additional text here</p>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product Showcase",
+      "category": "Custom",
+      "blocks": [
+        {
+          "type": "button"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

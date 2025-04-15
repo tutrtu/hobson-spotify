@@ -1,0 +1,304 @@
+{% schema %}
+{
+  "name": "Hobsons Under The Hat",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Section Heading",
+      "default": "Hobsons: Under the Hat"
+    },
+    {
+      "type": "blog",
+      "id": "blog",
+      "label": "Select Blog"
+    },
+    {
+      "type": "range",
+      "id": "sidebar_posts",
+      "min": 1,
+      "max": 5,
+      "step": 1,
+      "label": "Number of sidebar posts",
+      "default": 3
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hobsons Under The Hat",
+      "category": "Blog content"
+    }
+  ]
+}
+{% endschema %}
+
+<style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+
+    }
+
+    body {
+      background-color: #fff;
+      max-width: 100%;
+      margin: 0 auto;
+      padding: 0 auto;
+    }
+
+    .hobsons-section {
+      padding: 0 40px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    header {
+      margin-bottom: 30px;
+      text-align: center;
+    }
+
+    header h2 {
+      font-size: 36px;
+          font-weight: bold;
+          text-transform: uppercase;
+          color: #0d2d5c;
+          position: relative;
+          display: inline-block;
+          padding: 0 15px;
+    }
+
+    header h2::before {
+          content: '';
+          position: absolute;
+          width: 100%;
+          height: 10px;
+          background-color: #ffc107;
+          bottom: 5px;
+          left: 0;
+          z-index: -1;
+    }
+
+    .container {
+      display: flex;
+      gap: 30px;
+      margin: 0 auto;
+    }
+
+    .main-content {
+      flex: 3;
+      min-width: 300px;
+    }
+
+    .sidebar {
+      flex: 2;
+      min-width: 200px;
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+    }
+
+    .main-article {
+      margin-bottom: 30px;
+      background-color: #fff;
+      border-radius: 5px;
+      overflow: hidden;
+    }
+
+    .main-article-content {
+      text-align: center;
+      padding: 20px;
+    }
+
+    .main-article h3 {
+      color: #0d3b66;
+      text-transform: uppercase;
+      margin-bottom: 15px;
+      font-size: 22px;
+      text-align: center;
+    }
+
+    .main-article img {
+      width: 100%;
+      max-width: 600px;
+      height: auto;
+      display: block;
+      margin-bottom: 0;
+      background-color: #ffba08;
+    }
+
+    .main-article p {
+      margin-bottom: 15px;
+      line-height: 1.5;
+      font-size: 14px;
+    }
+
+    .article-item {
+      display: flex;
+      background-color: white;
+      border-radius: 0;
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+
+    .article-image {
+      flex: 0 0 120px;
+      min-width: 120px;
+      position: relative;
+    }
+
+    .article-image img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+    }
+
+    .article-badge {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background-color: #ffa300;
+      color: white;
+      text-align: center;
+      padding: 5px;
+      font-size: 12px;
+      font-weight: bold;
+      text-transform: uppercase;
+    }
+
+    .article-content {
+      flex: 1;
+      padding: 15px;
+    }
+
+    .article-content h3 {
+      color: #0d3b66;
+      margin-bottom: 10px;
+      font-size: 16px;
+      text-transform: uppercase;
+      font-weight: bold;
+    }
+
+    .article-content p {
+      font-size: 12px;
+      line-height: 1.4;
+      color: #555;
+    }
+
+    .read-more {
+      display: inline-block;
+      color: #0d3b66;
+      text-decoration: none;
+      font-weight: normal;
+      margin-top: 10px;
+    }
+
+    .hobsons-badge {
+      display: inline-block;
+      background-color: #ffba08;
+      color: #fff;
+      padding: 5px 10px;
+      font-size: 11px;
+      margin-bottom: 5px;
+      text-transform: uppercase;
+    }
+
+    @media (max-width: 768px) {
+      .hobsons-section {
+        padding: 0 20px;
+      }
+
+      .container {
+        flex-direction: column;
+      }
+
+      .article-item {
+        flex-direction: column;
+      }
+
+      .article-image {
+        flex: 0 0 auto;
+        min-width: 100%;
+        height: 200px;
+      }
+    }
+
+    .hobsons-badge-link {
+    text-decoration: none;
+  }
+
+  .main-title-link {
+    color: #0d3b66;
+    text-decoration: none;
+    font-size: 41px;
+  }
+
+  .main-title-link:hover {
+    text-decoration: none;
+    color: #fdc746;
+  }
+</style>
+
+<div class="hobsons-section">
+  <header>
+    <h2 style="display: inline-block">{{ section.settings.heading }}</h2>
+  </header>
+
+  <div class="container">
+    <div class="main-content">
+      {% assign main_article = blogs[section.settings.blog].articles | first %}
+      {% if main_article %}
+        <div class="main-article">
+          {% if main_article.image %}
+            <img
+              src="{{ main_article.image | img_url: '600x' }}"
+              alt="{{ main_article.title }}"
+            >
+          {% endif %}
+          <div class="main-article-content">
+            <a href="{{ main_article.url }}" class="hobsons-badge-link">
+              <div class="hobsons-badge">
+                {{ main_article.tags.first | default: 'Hobsons News' }}
+              </div>
+            </a>
+            <h3>
+              <a href="{{ main_article.url }}" class="main-title-link">
+                {{ main_article.title }}
+              </a>
+            </h3>
+          </div>
+        </div>
+      {% endif %}
+    </div>
+
+    <div class="sidebar">
+      {% assign sidebar_articles = blogs[section.settings.blog].articles | slice: 1, section.settings.sidebar_posts %}
+      {% for article in sidebar_articles %}
+        <div class="article-item">
+          <div class="article-image">
+            {% if article.image %}
+              <img
+                src="{{ article.image | img_url: '120x120', crop: 'center' }}"
+                alt="{{ article.title }}"
+              >
+            {% else %}
+              <img src="{{ 'placeholder.jpg' | asset_url }}" alt="{{ article.title }}">
+            {% endif %}
+
+            {% if article.tags.size > 0 %}
+              <div class="article-badge">{{ article.tags.first }}</div>
+            {% endif %}
+          </div>
+          <div class="article-content">
+            <h3>
+              <a href="{{ article.url }}" class="read-more">{{ article.title }}</a>
+            </h3>
+            <p>{{ article.excerpt_or_content | strip_html | truncatewords: 25 }}</p>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>

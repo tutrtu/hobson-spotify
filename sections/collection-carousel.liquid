@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hobsons Carousel</title>
+    <!-- Swiper JS CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/9.3.2/swiper-bundle.min.css">
+    <style>
+                                      /* Reset styles */
+                                .hobsons-container * {
+                                    margin: 0;
+                                    padding: 0;
+                                    box-sizing: border-box;
+
+                                }
+
+                                /* Main container */
+                                .hobsons-container {
+                                    max-width: 1200px;
+                                    margin: 0 auto;
+                                    padding: 0 15px;
+                                    display: block;
+                                  position: relative;
+                                }
+
+                                /* Section Header */
+                                .hobsons-section-header {
+                                    text-align: center;
+                                    margin-bottom: 40px;
+                                }
+
+                                .hobsons-section-title {
+                                    font-size: 36px;
+                                    font-weight: bold;
+                                    text-transform: uppercase;
+                                    color: #0d2d5c;
+                                    position: relative;
+                                    display: inline-block;
+                                    padding: 0 15px;
+                                }
+
+                                .hobsons-section-title::before {
+                                    content: '';
+                                    position: absolute;
+                                    width: 100%;
+                                    height: 10px;
+                                    background-color: #ffc107;
+                                    bottom: 5px;
+                                    left: 0;
+                                    z-index: -1;
+                                }
+
+                                /* Swiper carousel */
+                                .hobsons-swiper {
+              width: 100%;
+            padding: 20px 0 50px;
+            position: relative;
+            overflow: hidden; /* Ensure no horizontal overflow */
+                                }
+
+                                /* Swiper slide */
+                                .hobsons-swiper-slide {
+                                     position: relative;
+      height: 400px;
+      /* Remove the width: 100% that was forcing full width */
+      flex: 0 0 auto;
+
+
+                                }
+
+                                /* Product Card */
+                                .hobsons-product-card {
+                                    height: 100%;
+                                    width: 100%;
+                                    position: relative;
+                                    overflow: hidden;
+                                    border-radius: 8px;
+                                    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+                                }
+
+                                .hobsons-product-image {
+                                    height: 100%;
+                                    width: 100%;
+                                    object-fit: cover;
+                                    position: absolute;
+                                    top: 0;
+                                    left: 0;
+                                }
+
+                                /* Product Content */
+                                .hobsons-product-content {
+                                    position: absolute;
+                                    bottom: 0;
+                                    left: 0;
+                                    width: 100%;
+                                    text-align: center;
+                                    z-index: 10;
+                                    padding-bottom: 20px;
+                                    display: flex;
+                                flex-direction: column; /* Stack items vertically */
+                                align-items: center; /* Center items horizontally */
+                                gap: 0; /* Adds space between title and button */
+                                }
+
+                                /* Title above button */
+                                .hobsons-product-title {
+                                    font-size: 24px;
+                                    font-weight: bold;
+                                    color: #fff;
+                                    text-transform: uppercase;
+                                    margin-bottom: 10px;
+                                    padding: 5px 15px;
+                                    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+                                    background-color: #ffc107;
+                                    display: inline-block;
+                                }
+
+                                /* View Button */
+                                .hobsons-view-btn {
+                                    background-color: #0d2d5c;
+                                    color: white;
+                                    border: none;
+                                    padding: 10px 20px;
+                                    font-size: 16px;
+                                    text-transform: uppercase;
+                                    font-weight: bold;
+                                    cursor: pointer;
+                                    transition: background-color 0.3s;
+                                    display: inline-block;
+                                }
+
+                                .hobsons-view-btn:hover {
+                                    background-color: #0a2248;
+                                }
+
+
+                                .hobsons-product-card::before {
+                            content: '';
+                            position: absolute;
+                            top: 0;
+                            left: 0;
+                            width: 100%;
+                            height: 100%;
+                            background-image: url('https://cdn.shopify.com/s/files/1/0930/8602/3991/files/envent-bkg-overlay.webp?v=1743758396');
+                            background-size: cover;
+                            background-position: center;
+
+                            z-index: 5;
+                            pointer-events: none;
+                                      background-size: 100% 100%;
+                          }
+
+
+
+                    .swiper-button-next,
+              .swiper-button-prev {
+                color: #0d2d5c;
+                top: 50%;
+                transform: translateY(-50%);
+                z-index: 10;
+              }
+
+              .swiper-button-prev {
+                left: -25px; /* Adjust as needed */
+              }
+
+              .swiper-button-next {
+                right: -25px; /* Adjust as needed */
+              }
+    </style>
+  </head>
+  <body>
+    <div class="hobsons-container">
+      <div class="hobsons-section-header">
+        <h2 class="hobsons-section-title">{{ section.settings.heading }}</h2>
+      </div>
+
+      <div class="hobsons-swiper mySwiper">
+        <div class="swiper-wrapper">
+          {% for collection in section.settings.collection_list %}
+            <div class="hobsons-swiper-slide swiper-slide">
+              <div class="hobsons-product-card">
+                <img
+                  src="{{ collection.image | img_url: 'large' }}"
+                  alt="{{ collection.title }}"
+                  class="hobsons-product-image"
+                >
+                <div class="hobsons-product-content">
+                  <h3 class="hobsons-product-title">{{ collection.title }}</h3>
+                  <a href="{{ collection.url }}" class="hobsons-view-btn">VIEW</a>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+
+        <!-- Navigation buttons -->
+        <div class="swiper-button-prev"></div>
+        <div class="swiper-button-next"></div>
+      </div>
+    </div>
+    {% schema %}
+{
+  "name": "Collection Carousel",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Section Heading",
+      "default": "More from Hobsons"
+    },
+    {
+      "type": "collection_list",
+      "id": "collection_list",
+      "label": "Collections",
+      "limit": 10
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collection Carousel"
+    }
+  ]
+}
+    {% endschema %}
+
+    <!-- Swiper JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/9.3.2/swiper-bundle.min.js"></script>
+    <script>
+                  document.addEventListener('DOMContentLoaded', function() {
+                  const swiper = new Swiper(".mySwiper", {
+          slidesPerView: 2, // Change to 2
+          spaceBetween: 30,
+          loop: false,
+          navigation: {
+              nextEl: ".swiper-button-next",
+              prevEl: ".swiper-button-prev",
+          },
+          breakpoints: {
+              768: { slidesPerView: 2 },
+              1024: { slidesPerView: 3 },
+          }
+      });
+                    console.log(swiper);
+                  });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,262 @@
+{% comment %}
+  Newsletter Signup Section
+  A customizable newsletter subscription section with a colorful background
+{% endcomment %}
+
+<section class="newsletter-section" style="background-color: {{ section.settings.background_color }};">
+  <div class="newsletter-container">
+    <div class="newsletter-text">
+      <h2 class="newsletter-heading">
+        <span class="heading-line">{{ section.settings.heading_text }}</span><br>
+        <span class="highlight">{{ section.settings.highlight_text }}</span>
+      </h2>
+    </div>
+    <div class="newsletter-form">
+      {% form 'customer', class: 'contact-form' %}
+        {{ form.errors | default_errors }}
+        <input type="hidden" name="contact[tags]" value="newsletter">
+        <div class="form-fields">
+          <input
+            type="email"
+            name="contact[email]"
+            class="email-input"
+            placeholder="{{ section.settings.placeholder_text }}"
+            required
+          >
+          <button type="submit" class="submit-button" style="background-color: {{ section.settings.button_color }};">
+            {{ section.settings.button_text }}
+          </button>
+        </div>
+      {% endform %}
+    </div>
+  </div>
+</section>
+
+<style>
+      .newsletter-section {
+        width: 100%;
+        padding: 0;
+        margin: 0;
+      }
+
+      .newsletter-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        text-align: center;
+        flex-wrap: wrap;
+        gap: 0;
+        padding: 20px;
+        padding-right: 200px;
+      }
+
+      .newsletter-text {
+        flex: 1;
+        min-width: 300px;
+        text-align: right;
+        padding-right: 20px;
+      }
+
+      .newsletter-heading {
+        color: white;
+        font-size: 18px;
+        font-weight: bold;
+        margin: 0;
+        line-height: 1.2;
+        font-family: Arial, Helvetica, sans-serif;
+      }
+
+      .highlight {
+        display: inline-block;
+        color: {{ section.settings.highlight_color }};
+        text-transform: uppercase;
+      }
+
+      .newsletter-form {
+        flex: 1;
+        min-width: 300px;
+      }
+
+      .form-fields {
+        display: flex;
+        flex-wrap: nowrap;
+        gap: 0;
+        justify-content: flex-start;
+      }
+
+      .email-input {
+        padding: 15px;
+        width: 100%;
+        max-width: 350px;
+        border: none;
+        font-size: 16px;
+        outline: none;
+        box-sizing: border-box;
+      }
+
+      .submit-button {
+        padding: 15px 30px;
+        color: white;
+        border: none;
+        font-size: 18px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        white-space: nowrap;
+      }
+
+      .submit-button:hover {
+        opacity: 0.9;
+      }
+
+      @media (max-width: 768px) {
+        .newsletter-container {
+          flex-direction: column;
+          align-items: center;
+          text-align: center;
+        }
+
+        .newsletter-text {
+          text-align: center;
+          padding-right: 0;
+        }
+
+        .form-fields {
+          width: 100%;
+          justify-content: center;
+        }
+
+        .email-input {
+          width: 80%;
+        }
+
+        .submit-button {
+          width: auto;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .form-fields {
+          flex-direction: column;
+          align-items: stretch;
+        }
+
+        .email-input,
+        .submit-button {
+          width: 100%;
+        }
+
+        .submit-button {
+          font-size: 16px;
+          padding: 12px;
+        }
+
+        .newsletter-heading {
+          font-size: 28px;
+        }
+      }
+    .first-word {
+    color: #ffffff; /* or keep as is */
+  }
+
+
+      .second-word {
+      color: #002953; /* gold - customize as needed */
+    }
+
+    .third-word {
+      color: #002953; /* light green - customize as needed */
+    }
+</style>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    console.log("✅ DOM loaded");
+
+    const headingLine = document.querySelector(".heading-line");
+
+    if (!headingLine) {
+      console.warn("⚠️ Could not find .heading-line element");
+      return;
+    }
+
+    console.log("✅ Found .heading-line:", headingLine);
+
+    const text = headingLine.innerText.trim();
+    const words = text.split(" ");
+
+    console.log("📝 Original text:", text);
+    console.log("🔢 Words:", words);
+
+    if (words.length >= 3) {
+      words[0] = `<span class="first-word">${words[0]}</span>`;
+      words[1] = `<span class="second-word">${words[1]}</span>`;
+      words[2] = `<span class="third-word">${words[2]}</span>`;
+
+      headingLine.innerHTML = words.join(" ");
+      console.log("🎨 Updated HTML:", headingLine.innerHTML);
+    } else {
+      console.warn("⚠️ Not enough words to style");
+    }
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Newsletter Signup",
+  "tag": "section",
+  "class": "newsletter-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading_text",
+      "label": "Heading Text",
+      "default": "Get EXCLUSIVE DISCOUNTS when you"
+    },
+    {
+      "type": "text",
+      "id": "highlight_text",
+      "label": "Highlighted Text",
+      "default": "SIGN UP TO OUR NEWSLETTER"
+    },
+    {
+      "type": "text",
+      "id": "placeholder_text",
+      "label": "Email Placeholder",
+      "default": "Enter your email address"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button Text",
+      "default": "Submit"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background Color",
+      "default": "#00A3C4"
+    },
+    {
+      "type": "color",
+      "id": "highlight_color",
+      "label": "Highlight Text Color",
+      "default": "#FFB300"
+    },
+    {
+      "type": "color",
+      "id": "button_color",
+      "label": "Button Color",
+      "default": "#002953"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Newsletter Signup",
+      "category": "Promotional"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,93 @@
+<div class="hobsons-collection-card">
+  <div
+    class="hobsons-card-image"
+    style="background-image: url({{ card_collection.featured_image | image_url: width: 800 }});"
+  >
+    <div class="hobsons-card-overlay"></div>
+    <div class="hobsons-card-content">
+      <h2 class="hobsons-card-title">{{ card_collection.title }}</h2>
+      <a href="{{ card_collection.url }}" class="hobsons-view-btn">View</a>
+    </div>
+  </div>
+</div>
+
+<style>
+   .collection-wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .hobsons-collection-card {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    aspect-ratio: 3 / 3;
+  }
+
+  .hobsons-card-image {
+    background-size: cover;
+    background-position: center;
+    height: 100%;
+    width: 100%;
+    position: relative;
+  }
+
+  .hobsons-card-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('https://cdn.shopify.com/s/files/1/0930/8602/3991/files/envent-bkg-overlay.webp?v=1743758396');
+    background-size: 100% 100%;
+    background-position: center;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  .hobsons-card-content {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    z-index: 1;
+    padding-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .hobsons-card-title {
+    font-size: 58px;
+    font-weight: bold;
+    color: #fff;
+    text-transform: uppercase;
+    padding: 5px 15px;
+    background-color: #ffc107;
+    padding: 0px 5px;
+    font-weight: 400;
+    display: inline-block;
+  }
+
+  .hobsons-view-btn {
+    background-color: #0d2d5c;
+    color: white;
+    border: none;
+    padding: 8px 18px;
+    font-size: 14px;
+    text-transform: uppercase;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    display: inline-block;
+    text-decoration: none;
+    border: 0.5px solid white;
+  }
+
+  .hobsons-view-btn:hover {
+    background-color: #ffc107;
+    border: 0.5px solid white;
+  }
+</style>

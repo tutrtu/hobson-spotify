@@ -1,0 +1,426 @@
+{% comment %}
+  Blog Posts Section for Shopify
+  Displays a list of blog posts with featured images, metadata, and excerpts
+{% endcomment %}
+
+<div class="blog-posts-section">
+  <div class="section-header">
+    <h2>{{ section.settings.heading }}</h2>
+    {% if section.settings.show_description and section.settings.description != blank %}
+      <div class="section-description">{{ section.settings.description }}</div>
+    {% endif %}
+  </div>
+
+  {% if section.settings.blog != blank %}
+    {% assign blog = blogs[section.settings.blog] %}
+
+    <ul class="blog-posts-list">
+      {%- for article in blog.articles limit: section.settings.post_limit -%}
+        <li class="blog-post-item">
+          <div class="blog-post-card">
+            {% if article.image and section.settings.show_image %}
+              <div class="blog-post-image">
+                <a href="{{ article.url }}">
+                  <img
+                    src="{{ article.image | img_url: '400x300', crop: 'center' }}"
+                    alt="{{ article.title | escape }}"
+                    width="400"
+                    height="300"
+                    loading="lazy"
+                  >
+                </a>
+              </div>
+            {% endif %}
+
+            <div class="blog-post-content">
+              <h3 class="blog-post-title">
+                <a href="{{ article.url }}">{{ article.title }}</a>
+              </h3>
+
+              <div class="blog-post-meta">
+                {%- if section.settings.show_author -%}
+                  <span class="blog-post-author">By {{ article.author }}</span>
+                {%- endif -%}
+
+                {%- if section.settings.show_date -%}
+                  <span class="blog-post-date">
+                    {{ article.published_at | time_tag: format: 'month_day_year' }}
+                  </span>
+                {%- endif -%}
+              </div>
+
+              {% if section.settings.show_excerpt %}
+                <div class="blog-post-excerpt">
+                  {%- if article.excerpt.size > 0 -%}
+                    {{ article.excerpt }}
+                  {%- else -%}
+                    {{ article.content | strip_html | truncate: section.settings.excerpt_length }}
+                  {%- endif -%}
+                </div>
+              {% endif %}
+
+              {% if article.tags.size > 0 and section.settings.show_tags %}
+                <div class="blog-post-tags">
+                  <span>
+                    {% if 'blogs.comments.comments_with_count' %}
+                      Posted in:
+                    {% endif %}
+                  </span>
+                  {%- for tag in article.tags -%}
+                    <a href="{{ blog.url }}/tagged/{{ tag | handle }}">{{ tag }}</a>
+                    {%- unless forloop.last %}, {% endunless %}
+                  {%- endfor -%}
+                </div>
+              {% endif %}
+
+              <div class="blog-post-actions">
+                <a class="blog-post-read-more" href="{{ article.url }}" aria-label="Read more: {{ article.title }}">
+                  {{ section.settings.read_more_text }}
+                </a>
+
+                {%- if blog.comments_enabled? and article.comments_count > 0 and section.settings.show_comments -%}
+                  <a class="blog-post-comments" href="{{ article.url }}#comments">
+                    {{ article.comments_count }}
+                    {% if 'blogs.comments.comments_with_count' %}
+                      {% if article.comments_count == 1 %}comment{% else %}comments{% endif %}
+                    {% else %}
+                      {{ 'blogs.comments.comments_with_count' }}
+                    {% endif %}
+                  </a>
+                {%- endif -%}
+              </div>
+            </div>
+          </div>
+        </li>
+      {%- endfor -%}
+    </ul>
+
+    {% if section.settings.show_view_all %}
+      <div class="blog-view-all">
+        <a href="{{ blog.url }}" class="button">{{ section.settings.view_all_text }}</a>
+      </div>
+    {% endif %}
+
+  {% else %}
+    <div class="placeholder">
+      <p>Please select a blog in the section settings</p>
+    </div>
+  {% endif %}
+</div>
+
+<style>
+  .blog-posts-section {
+    padding: {{ section.settings.padding_top }}px 0 {{ section.settings.padding_bottom }}px;
+  }
+
+  .section-header {
+    text-align: {{ section.settings.heading_alignment }};
+    margin-bottom: 30px;
+  }
+
+  .blog-posts-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat({{ section.settings.columns_desktop }}, 1fr);
+    gap: 30px;
+  }
+
+  .blog-post-card {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    border-radius: {{ section.settings.card_border_radius }}px;
+    overflow: hidden;
+    {% if section.settings.card_style == 'card' %}
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      border: 1px solid #e8e8e8;
+    {% endif %}
+  }
+
+  .blog-post-image {
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .blog-post-image img {
+    width: 100%;
+    height: auto;
+    display: block;
+    transition: transform 0.3s ease;
+  }
+
+  .blog-post-image img:hover {
+    transform: scale(1.05);
+  }
+
+  .blog-post-content {
+    padding: 20px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .blog-post-title {
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: {{ section.settings.heading_size }}px;
+  }
+
+  .blog-post-meta {
+    font-size: 0.9em;
+    color: #666;
+    margin-bottom: 15px;
+  }
+
+  .blog-post-meta > span:not(:last-child)::after {
+    content: " | ";
+    margin: 0 5px;
+  }
+
+  .blog-post-excerpt {
+    margin-bottom: 15px;
+    flex-grow: 1;
+  }
+
+  .blog-post-tags {
+    font-size: 0.85em;
+    margin-bottom: 15px;
+  }
+
+  .blog-post-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+  }
+
+  .blog-post-read-more {
+    font-weight: bold;
+    text-decoration: none;
+  }
+
+  .blog-view-all {
+    text-align: center;
+    margin-top: 40px;
+  }
+
+  @media screen and (max-width: 768px) {
+    .blog-posts-list {
+      grid-template-columns: repeat({{ section.settings.columns_mobile }}, 1fr);
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Blog Posts",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "default": "Latest Blog Posts",
+      "label": "Heading"
+    },
+    {
+      "type": "select",
+      "id": "heading_alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "center",
+      "label": "Heading alignment"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "min": 16,
+      "max": 36,
+      "step": 2,
+      "default": 22,
+      "unit": "px",
+      "label": "Heading size"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_description",
+      "default": false,
+      "label": "Show description"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description"
+    },
+    {
+      "type": "blog",
+      "id": "blog",
+      "label": "Blog"
+    },
+    {
+      "type": "range",
+      "id": "post_limit",
+      "min": 1,
+      "max": 12,
+      "step": 1,
+      "default": 3,
+      "label": "Number of posts"
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "min": 1,
+      "max": 4,
+      "step": 1,
+      "default": 3,
+      "label": "Number of columns (desktop)"
+    },
+    {
+      "type": "select",
+      "id": "columns_mobile",
+      "options": [
+        {
+          "value": "1",
+          "label": "1 column"
+        },
+        {
+          "value": "2",
+          "label": "2 columns"
+        }
+      ],
+      "default": "1",
+      "label": "Number of columns (mobile)"
+    },
+    {
+      "type": "select",
+      "id": "card_style",
+      "options": [
+        {
+          "value": "card",
+          "label": "Card"
+        },
+        {
+          "value": "flat",
+          "label": "Flat"
+        }
+      ],
+      "default": "card",
+      "label": "Post card style"
+    },
+    {
+      "type": "range",
+      "id": "card_border_radius",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "default": 8,
+      "unit": "px",
+      "label": "Card border radius"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_image",
+      "default": true,
+      "label": "Show featured image"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_author",
+      "default": true,
+      "label": "Show author"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_date",
+      "default": true,
+      "label": "Show date"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_excerpt",
+      "default": true,
+      "label": "Show excerpt"
+    },
+    {
+      "type": "range",
+      "id": "excerpt_length",
+      "min": 50,
+      "max": 350,
+      "step": 10,
+      "default": 150,
+      "label": "Excerpt length"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_tags",
+      "default": true,
+      "label": "Show tags"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_comments",
+      "default": true,
+      "label": "Show comment count"
+    },
+    {
+      "type": "text",
+      "id": "read_more_text",
+      "default": "Read more",
+      "label": "Read more text"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_all",
+      "default": true,
+      "label": "Show view all button"
+    },
+    {
+      "type": "text",
+      "id": "view_all_text",
+      "default": "View all posts",
+      "label": "View all text"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "default": 40,
+      "unit": "px",
+      "label": "Padding top"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "default": 40,
+      "unit": "px",
+      "label": "Padding bottom"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Blog Posts",
+      "category": "Blog"
+    }
+  ]
+}
+{% endschema %}

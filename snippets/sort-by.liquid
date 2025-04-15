@@ -1,0 +1,36 @@
+<form id="SortByToolbar" class="facets__form">
+  <div class="facet-filters sorting caption">
+    <div class="facet-filters__field">
+      <label class="facet-filters__label" for="SortBy">
+        {{ 'products.facets.sort_by_label' | t }}
+      </label>
+      <div class="select">
+        <select
+          name="sort_by"
+          class="facet-filters__sort select__select caption-large"
+          id="SortBy"
+          aria-describedby="a11y-refresh-page-message"
+        >
+          {%- for option in collection.sort_options -%}
+            <option
+              value="{{ option.value | escape }}"
+              {% if option.value == collection.sort_by %}
+                selected="selected"
+              {% endif %}
+            >
+              {{ option.name | escape }}
+            </option>
+          {%- endfor -%}
+        </select>
+        <svg
+          aria-hidden="true"
+          focusable="false"
+          class="icon icon-caret"
+          viewBox="0 0 10 6"
+        >
+          <path d="M0 0l5 6 5-6H0z" fill="currentColor" />
+        </svg>
+      </div>
+    </div>
+  </div>
+</form>
